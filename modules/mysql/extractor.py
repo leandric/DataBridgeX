@@ -1,11 +1,11 @@
-from sqlalchemy import create_engine
-from sqlalchemy import text
+from sqlalchemy import create_engine, text
 from datetime import datetime 
 import pandas as pd
+import logging
 import os
 
 
-class NomeTabela:
+class TabelaNome:
     def __init__(self, conf) -> None:
         self.__QUERY = conf['PATH_SQL'] if os.path.exists(conf['PATH_SQL']) else None
 
@@ -37,21 +37,23 @@ class NomeTabela:
     def updater(self):
 
             try:
-                self.__conn = self.__engine.connect()
-                self.frame = pd.read_sql(text(self.__query), self.__conn)
-                self.__conn.close()
-                
+                logging.info(f'Getting data at the source...')
+                with self.__engine.connect() as self.__conn:
+                    self.frame = pd.read_sql(text(self.__query), self.__conn)
+                logging.info(f'Data obtained, shape: {self.frame.shape}')
             except Exception as e:
-                print(e)
+                logging.error(e)
             
             new_keys = []
             for key in self.frame.keys():
                 new_keys.append(key.replace(".",""))
             self.frame.columns = new_keys
+            logging.info(f'Processing data...')
             self.frame = self.__transform(self.frame)
             self.frame['LAST_UPDATE'] = datetime.now()
             self.memoria = (self.frame.memory_usage().sum() / (1024*1024))
             self.linhas = len(self.frame)
+            logging.info(f'results: [Rows: {self.linhas}, MegaBytes:{self.memoria}]')
 
 if __name__ == '__main__':
 	confs = {
@@ -61,6 +63,6 @@ if __name__ == '__main__':
             "DB_PORT":"3308",
             "DATABASE":"database"
         }
-	frame = NomeTabela(conf=confs)
+	frame = TabelaNome(conf=confs)
 	df = frame.frame.copy()
 	print(df, '\n\t\t\t\t\t\t\t\t\t\t\t\t Test Ok \n\n')

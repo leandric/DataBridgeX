@@ -1,1 +1,1 @@
-select * from teste.tabela
+SELECT * FROM AdventureWorks2022.Person.Address

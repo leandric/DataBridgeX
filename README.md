@@ -10,8 +10,6 @@ criar o arquivo .env no diretório raiz
 # To Do
 * classe de consulta sqlserver
 * classe de leitura de arquivos
-* Classe de carga Bigquery
-* Classe de Carga Mysql
 * Classe de Carga SQLServer
 * app.py - interface texto
 * app.py - webapp streamlit

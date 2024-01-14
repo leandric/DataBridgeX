@@ -4,6 +4,8 @@ import logging
 from dotenv import load_dotenv
 from modules.mysql.extractor import *
 from modules.msqlserver.extractor import *
+from modules.mysql.loader import *
+from modules.msqlserver.loader import *
 
 # Carrega as variaveis de ambiente do arquivo .env
 load_dotenv()
