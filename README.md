@@ -1,6 +1,6 @@
 # DataBridgeX
 Sistema de ETL
-
+t
 
 Configuração inicial:
 instalar as dependencias contidas em requirements.txt
